@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GameService.Domain.Entities;
 using GameService.Application.DTOs;
-using GameService.Application.Mediators;
+using GameService.Application.Services;
 namespace GameService.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
     public class GameServiceController : ControllerBase
     {
-        private readonly IGameMediator _mediator;
+        private readonly IGamesService _mediator;
 
-        public GameServiceController(IGameMediator mediator)
+        public GameServiceController(IGamesService mediator)
         {
             _mediator = mediator;
         }

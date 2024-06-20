@@ -9,13 +9,13 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.WebRequestMethods;
 
-namespace GameService.Application.Mediators
+namespace GameService.Application.Services
 {
-    public class GameMediator : IGameMediator
+    public class GamesService : IGamesService
     {
         private readonly ISteamApiClient _steamApiClient;
 
-        public GameMediator(ISteamApiClient steamApiClient)
+        public GamesService(ISteamApiClient steamApiClient)
         {
             _steamApiClient = steamApiClient;
         }

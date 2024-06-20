@@ -1,4 +1,6 @@
-﻿using GameService.Domain.ValueObjects;
+﻿using GameService.Application.Boundaries;
+using GameService.Domain.Entities;
+using GameService.Domain.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GameService.Application.Queries
 {
-    public class GetUserQuery
+    public class GetUserQuery : IRequest<GetUserOutput>
     {
         public SteamId SteamId { get; }
 

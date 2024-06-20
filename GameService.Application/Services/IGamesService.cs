@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameService.Application.Mediators
+namespace GameService.Application.Services
 {
-    public interface IGameMediator
+    public interface IGamesService
     {
         Task<IEnumerable<GameDto>> GetGamesForUser(string steamId);
         Task<GameSchemaDto> GetGameDetails(int appId);

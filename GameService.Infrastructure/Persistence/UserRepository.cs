@@ -38,9 +38,10 @@ namespace GameService.Infrastructure.Persistence
             }
         }
 
-        public async Task CreateAsync(User user)
+        public async Task<HttpStatusCode> CreateAsync(User user)
         {
-            await _container.CreateItemAsync(user);
+            var result = await _container.CreateItemAsync(user);
+            return result.StatusCode;
         }
 
         public async Task<User?> GetBySteamIdAsync(SteamId steamId)

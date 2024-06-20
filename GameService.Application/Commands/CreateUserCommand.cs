@@ -1,4 +1,6 @@
-﻿using GameService.Domain.ValueObjects;
+﻿using GameService.Application.Boundaries;
+using GameService.Application.Queries;
+using GameService.Domain.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GameService.Application.Commands
 {
-    public class CreateUserCommand
+    public class CreateUserCommand : IRequest<CreateUserOutput>
     {
         public Guid Id { get; set; }
         public string DisplayName { get; set; }

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using GameService.Application.Mediators;
 using GameService.Application.Queries;
 using GameService.Application.Commands;
 using GameService.Application.DTOs;
 using System.Diagnostics;
+using GameService.Application.Services;
 
 namespace GameService.Api.Controllers
 {
@@ -11,24 +11,24 @@ namespace GameService.Api.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IUserMediator _userMediator;
+        private readonly IUserService _userService;
 
-        public UserController(IUserMediator userMediator)
+        public UserController(IUserService userService)
         {
-            _userMediator = userMediator;
+            _userService = userService;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<UserDto>>> GetUsers()
         {
-            var users = await _userMediator.Handle();
+            var users = await _userService.GetUsersAsync(new GetUsersQuery());
             return users == null ? NotFound() : Ok(users);
         }
 
         [HttpGet("{steamId}")]
         public async Task<ActionResult<UserDto>> GetUser(string steamId)
         {
-            var userDto = await _userMediator.Handle(new GetUserQuery(steamId));
+            var userDto = await _userService.GetUserAsync(new GetUserQuery(steamId));
             return userDto == null ? NotFound() : Ok(userDto);
         }
 
@@ -42,16 +42,16 @@ namespace GameService.Api.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var existingUser = await _userMediator.Handle(new GetUserQuery(dto.SteamId));
+                var existingUser = await _userService.GetUserAsync(new GetUserQuery(dto.SteamId));
                 if (existingUser != null)
                 {
                     return Conflict("User with this Steam ID already exists.");
                 }
 
                 var command = new CreateUserCommand(dto.SteamId, dto.DisplayName, dto.Email, Guid.NewGuid());
-                await _userMediator.Handle(command);
+                var output = await _userService.CreateUserAsync(command);
 
-                return CreatedAtAction(nameof(GetUser), new { steamId = dto.SteamId.Value }, dto);
+                return CreatedAtAction(nameof(GetUser), new { steamId = output.User.SteamId.Value }, output.User);
             }
             catch (Exception ex)
             {
