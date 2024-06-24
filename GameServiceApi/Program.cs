@@ -20,14 +20,13 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ISteamApiClient, SteamApiClient>();
-builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IGamesService, GamesService>();
 builder.Services.AddScoped<IMediator, Mediator>();
 
 // Register Handlers
-builder.Services.AddScoped<IRequestHandler<GetUserQuery, GetUserOutput>, UserQueryHandler>();
-builder.Services.AddScoped<IRequestHandler<GetUsersQuery, GetUsersOutput>, UsersQueryHandler>();
-builder.Services.AddScoped<IRequestHandler<CreateUserCommand, CreateUserOutput>, CreateUserCommandHandler>();
+builder.Services.AddScoped<IRequestHandler<GetUserQuery, GetUserOutput>, GetUserHandler>();
+builder.Services.AddScoped<IRequestHandler<GetUsersQuery, GetUsersOutput>, GetUsersListHandler>();
+builder.Services.AddScoped<IRequestHandler<CreateUserCommand, CreateUserOutput>, CreateUserHandler>();
 
 builder.Services.AddHttpClient<ISteamApiClient, SteamApiClient>(client =>
 {

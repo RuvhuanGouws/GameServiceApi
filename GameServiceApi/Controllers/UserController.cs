@@ -4,6 +4,7 @@ using GameService.Application.Commands;
 using GameService.Application.DTOs;
 using System.Diagnostics;
 using GameService.Application.Services;
+using GameService.Application.Mediator;
 
 namespace GameService.Api.Controllers
 {
@@ -11,24 +12,24 @@ namespace GameService.Api.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IMediator _mediator;
 
-        public UserController(IUserService userService)
+        public UserController(IMediator mediator)
         {
-            _userService = userService;
+            _mediator = mediator;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<UserDto>>> GetUsers()
         {
-            var users = await _userService.GetUsersAsync(new GetUsersQuery());
+            var users = await _mediator.Send(new GetUsersQuery());
             return users == null ? NotFound() : Ok(users);
         }
 
         [HttpGet("{steamId}")]
         public async Task<ActionResult<UserDto>> GetUser(string steamId)
         {
-            var userDto = await _userService.GetUserAsync(new GetUserQuery(steamId));
+            var userDto = await _mediator.Send(new GetUserQuery(steamId));
             return userDto == null ? NotFound() : Ok(userDto);
         }
 
@@ -42,14 +43,14 @@ namespace GameService.Api.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var existingUser = await _userService.GetUserAsync(new GetUserQuery(dto.SteamId));
+                var existingUser = await _mediator.Send(new GetUserQuery(dto.SteamId));
                 if (existingUser != null)
                 {
                     return Conflict("User with this Steam ID already exists.");
                 }
 
                 var command = new CreateUserCommand(dto.SteamId, dto.DisplayName, dto.Email, Guid.NewGuid());
-                var output = await _userService.CreateUserAsync(command);
+                var output = await _mediator.Send(command);
 
                 return CreatedAtAction(nameof(GetUser), new { steamId = output.User.SteamId.Value }, output.User);
             }

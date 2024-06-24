@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace GameService.Application.Handlers
 {
-    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, CreateUserOutput>
+    public class CreateUserHandler : IRequestHandler<CreateUserCommand, CreateUserOutput>
     {
         private readonly IUserRepository _userRepository;
 
-        public CreateUserCommandHandler(IUserRepository userRepository)
+        public CreateUserHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
