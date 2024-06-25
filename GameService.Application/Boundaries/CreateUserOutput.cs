@@ -9,11 +9,14 @@ namespace GameService.Application.Boundaries
 {
     public class CreateUserOutput
     {
-        public UserDto User { get; }
+        public bool IsSuccess => User != null;
+        public string? ErrorMessage { get; set; }
+        public UserDto? User { get; }
 
-        public CreateUserOutput(UserDto user)
+        public CreateUserOutput(UserDto? user, string? errorMessage)
         {
             User = user;
+            ErrorMessage = errorMessage;
         }
     }
 }

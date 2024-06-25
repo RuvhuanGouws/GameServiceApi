@@ -24,6 +24,13 @@ namespace GameService.Application.Handlers
         {
             var user = new User(request.Id, request.DisplayName, request.Email, request.SteamId);
 
+            var existingUser = await _userRepository.GetBySteamIdAsync(request.SteamId);
+
+            if (existingUser != null)
+            {
+                return new CreateUserOutput(null, "User with that SteamId already exists.");
+            }
+
             var statusCode = await _userRepository.CreateAsync(user);
 
             if (statusCode != System.Net.HttpStatusCode.Created)
@@ -31,7 +38,7 @@ namespace GameService.Application.Handlers
                 return null;
             }
 
-            return new CreateUserOutput(UserMapper.ToDto(user));
+            return new CreateUserOutput(UserMapper.ToDto(user), null);
         }
     }
 }

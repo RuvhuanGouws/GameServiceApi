@@ -36,22 +36,11 @@ namespace GameService.Api.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                var existingUser = await _mediator.Send(new GetUserQuery(dto.SteamId));
-                if (existingUser != null)
-                {
-                    return Conflict("User with this Steam ID already exists.");
-                }
-
                 var command = new CreateUserCommand(dto.SteamId, dto.DisplayName, dto.Email, Guid.NewGuid());
                 var output = await _mediator.Send(command);
 
-                return CreatedAtAction(nameof(GetUser), new { steamId = output.User.SteamId.Value }, output.User);
-            }
+                return output.IsSuccess ? CreatedAtAction(nameof(GetUser), new { steamId = output.User.SteamId.Value }, output.User) : Conflict(output.ErrorMessage);
+            } 
             catch (Exception ex)
             {
                 return StatusCode(500, "An error occurred while registering the user." + ex.Message);
