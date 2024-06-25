@@ -2,8 +2,6 @@
 using GameService.Application.Queries;
 using GameService.Application.Commands;
 using GameService.Application.DTOs;
-using System.Diagnostics;
-using GameService.Application.Services;
 using GameService.Application.Mediator;
 
 namespace GameService.Api.Controllers

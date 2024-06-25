@@ -3,7 +3,6 @@ using GameService.Application.Commands;
 using GameService.Application.Handlers;
 using GameService.Application.Mediator;
 using GameService.Application.Queries;
-using GameService.Application.Services;
 using GameService.Infrastructure.Persistence;
 using GameService.Infrastructure.SteamApi;
 
@@ -20,13 +19,14 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ISteamApiClient, SteamApiClient>();
-builder.Services.AddScoped<IGamesService, GamesService>();
 builder.Services.AddScoped<IMediator, Mediator>();
 
 // Register Handlers
 builder.Services.AddScoped<IRequestHandler<GetUserQuery, GetUserOutput>, GetUserHandler>();
 builder.Services.AddScoped<IRequestHandler<GetUsersQuery, GetUsersOutput>, GetUsersListHandler>();
 builder.Services.AddScoped<IRequestHandler<CreateUserCommand, CreateUserOutput>, CreateUserHandler>();
+builder.Services.AddScoped<IRequestHandler<GetOwnedGamesQuery, GetOwnedGamesOutput>, GetOwnedGamesHandler>();
+builder.Services.AddScoped<IRequestHandler<GetGameDetailsQuery, GetGameDetailsOutput>, GetGameDetailsHandler>();
 
 builder.Services.AddHttpClient<ISteamApiClient, SteamApiClient>(client =>
 {

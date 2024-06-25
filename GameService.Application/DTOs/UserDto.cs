@@ -18,7 +18,7 @@ namespace GameService.Application.DTOs
 
         public UserDto() 
         {
-            SteamId = "76561198070790326";
+            SteamId = "123456789123456789";
             DisplayName = string.Empty;
             Email = string.Empty;            
         }

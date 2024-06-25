@@ -1,41 +1,29 @@
-﻿using GameService.Application.DTOs;
-using GameService.Domain.Entities;
+﻿using GameService.Application.Boundaries;
+using GameService.Application.DTOs;
+using GameService.Application.Mappers;
+using GameService.Application.Queries;
+using GameService.Domain.ValueObjects;
 using GameService.Infrastructure.SteamApi;
-using Microsoft.Azure.Cosmos.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Net.WebRequestMethods;
 
-namespace GameService.Application.Services
+namespace GameService.Application.Handlers
 {
-    public class GamesService : IGamesService
+    public class GetGameDetailsHandler : IRequestHandler<GetGameDetailsQuery, GetGameDetailsOutput>
     {
         private readonly ISteamApiClient _steamApiClient;
 
-        public GamesService(ISteamApiClient steamApiClient)
+        public GetGameDetailsHandler(ISteamApiClient steamApiClient)
         {
             _steamApiClient = steamApiClient;
         }
 
-        public async Task<IEnumerable<GameDto>> GetGamesForUser(string steamId)
+        public async Task<GetGameDetailsOutput?> Handle(GetGameDetailsQuery request)
         {
-            var games = await _steamApiClient.GetOwnedGames(steamId);
-            return games.Select(g => new GameDto
-            {
-                AppId = g.Appid,
-                Name = g.Name,
-                ImageUrl = $"http://media.steampowered.com/steamcommunity/public/images/apps/{g.Appid}/{g.ImgIconUrl}.jpg",
-                HasCommunityVisibleStats = g.HasCommunityVisibleStats,
-                PlaytimeForever = g.PlaytimeForever,
-            });
-        }
-
-        public async Task<GameSchemaDto> GetGameDetails(int appId)
-        {
-            var game = await _steamApiClient.GetAppDetails(appId);
+            var game = await _steamApiClient.GetAppDetails(request.AppId);
             List<GameSchemaAchievement> achievements = new List<GameSchemaAchievement>();
 
             // Not all games have achievements
@@ -55,8 +43,8 @@ namespace GameService.Application.Services
                     });
                 }
             }
-            
-            return new GameSchemaDto
+
+            return new GetGameDetailsOutput(new GameSchemaDto
             {
                 GameName = game.GameName,
                 GameVersion = game.GameVersion,
@@ -64,7 +52,7 @@ namespace GameService.Application.Services
                 {
                     Achievements = achievements
                 }
-            };
+            });
         }
     }
 }
