@@ -59,6 +59,7 @@ The API is self-documenting using Swagger UI. Once the application is running, n
 
 ## Architecture
 -   **Domain-Driven Design (DDD):** The domain model is designed to reflect the core concepts and relationships of the problem domain.
+-   **Mediator Pattern:** A custom mediator pattern has been implemented to facilitate communication between API and Infrastructure layers.
 -   **Dependency Injection:** The application uses dependency injection to manage dependencies and make the code more testable.
 -   **Cosmos DB:**  The API uses Azure Cosmos DB as the database for storing user data.
 -   **Steam Web API:** The API integrates with the Steam Web API to fetch game and achievement data.
