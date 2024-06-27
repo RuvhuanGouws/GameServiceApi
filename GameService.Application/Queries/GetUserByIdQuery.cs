@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace GameService.Application.Queries
 {
-    public class GetUserQuery : IRequest<GetUserOutput>
+    public class GetUserByIdQuery : IRequest<GetUserOutput>
     {
-        public SteamId SteamId { get; }
+        public string Id { get; }
 
-        public GetUserQuery(SteamId steamId)
+        public GetUserByIdQuery(string id)
         {
-            SteamId = steamId;
+            Id = id;
         }
     }
 }

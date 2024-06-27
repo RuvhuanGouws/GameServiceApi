@@ -38,10 +38,12 @@ namespace GameService.Infrastructure.Persistence
             }
         }
 
-        public async Task<HttpStatusCode> CreateAsync(User user)
+        public async Task<User?> CreateAsync(string steamId, string email, string displayName)
         {
+            var user = new User(displayName, email, steamId, Guid.NewGuid().ToString());
             var result = await _container.CreateItemAsync(user);
-            return result.StatusCode;
+             
+            return result.StatusCode == HttpStatusCode.Created ? user : null;
         }
 
         public async Task<User?> GetBySteamIdAsync(SteamId steamId)
@@ -50,6 +52,29 @@ namespace GameService.Infrastructure.Persistence
             {
                 QueryDefinition queryDefinition = new QueryDefinition("SELECT * FROM c WHERE c.SteamId = @steamId")
                 .WithParameter("@steamId", steamId.Value);
+                FeedIterator<User> queryResultSetIterator = _container.GetItemQueryIterator<User>(queryDefinition);
+
+                FeedResponse<User> currentResultSet = await queryResultSetIterator.ReadNextAsync();
+
+                if (currentResultSet.Count == 0)
+                {
+                    return null;
+                }
+
+                return currentResultSet.FirstOrDefault();
+            }
+            catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+        }
+
+        public async Task<User?> GetByIdAsync(string id)
+        {
+            try
+            {
+                QueryDefinition queryDefinition = new QueryDefinition("SELECT * FROM c WHERE c.id = @id")
+                .WithParameter("@id", id);
                 FeedIterator<User> queryResultSetIterator = _container.GetItemQueryIterator<User>(queryDefinition);
 
                 FeedResponse<User> currentResultSet = await queryResultSetIterator.ReadNextAsync();

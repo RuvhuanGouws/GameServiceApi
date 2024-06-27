@@ -1,5 +1,6 @@
 ﻿using GameService.Domain.ValueObjects;
-using GameService.Infrastructure.SteamApi.Models;
+using GameService.Infrastructure.SteamApi.Models.GameSchemaResponse;
+using GameService.Infrastructure.SteamApi.Models.GamesResponse;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -36,15 +37,22 @@ namespace GameService.Infrastructure.SteamApi
 
         public async Task<List<Game>?> GetOwnedGames(string steamId)
         {
-            var response = await _httpClient.GetFromJsonAsync<GamesResponseRoot>(
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<GamesResponseRoot>(
                 $"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={_apiKey}&steamid={steamId}&format=json&include_appinfo=true&include_played_free_games=true");
 
-            if (response is null || !response.Response.Games.Any())
+                if (response is null || !response.Response.Games.Any())
+                {
+                    return null;
+                }
+
+                return response.Response.Games;
+            }
+            catch (Exception)
             {
                 return null;
             }
-
-            return response.Response.Games;
         }
     }
 }

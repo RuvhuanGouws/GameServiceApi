@@ -3,10 +3,12 @@ using GameService.Application.Commands;
 using GameService.Application.Mappers;
 using GameService.Domain.Entities;
 using GameService.Infrastructure.Persistence;
+using GameService.Infrastructure.SteamApi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace GameService.Application.Handlers
@@ -14,15 +16,27 @@ namespace GameService.Application.Handlers
     public class CreateUserHandler : IRequestHandler<CreateUserCommand, CreateUserOutput>
     {
         private readonly IUserRepository _userRepository;
+        private readonly ISteamApiClient _steamApiClient;
 
-        public CreateUserHandler(IUserRepository userRepository)
+        public CreateUserHandler(IUserRepository userRepository, ISteamApiClient steamApiClient)
         {
             _userRepository = userRepository;
+            _steamApiClient = steamApiClient;
         }
 
         public async Task<CreateUserOutput?> Handle(CreateUserCommand request)
         {
-            var user = new User(request.Id, request.DisplayName, request.Email, request.SteamId);
+            if (!Regex.IsMatch(request.Email, "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$"))
+            {
+                return new CreateUserOutput(null, "Email is not valid.");
+            }
+
+            var userSummary = await _steamApiClient.GetOwnedGames(request.SteamId);
+
+            if (userSummary == null)
+            {
+                return new CreateUserOutput(null, "This is not a registered SteamID or the Steam profile is set to private.");
+            }
 
             var existingUser = await _userRepository.GetBySteamIdAsync(request.SteamId);
 
@@ -31,9 +45,9 @@ namespace GameService.Application.Handlers
                 return new CreateUserOutput(null, "User with that SteamId already exists.");
             }
 
-            var statusCode = await _userRepository.CreateAsync(user);
+            var user = await _userRepository.CreateAsync(request.SteamId, request.Email, request.DisplayName);
 
-            if (statusCode != System.Net.HttpStatusCode.Created)
+            if (user == null)
             {
                 return null;
             }

@@ -2,9 +2,9 @@
 using GameService.Application.Queries;
 using GameService.Infrastructure.SteamApi;
 using GameService.Application.DTOs;
-using GameService.Infrastructure.SteamApi.Models;
-using AvailableGameStats = GameService.Infrastructure.SteamApi.Models.AvailableGameStats;
-using GameSchemaAchievement = GameService.Infrastructure.SteamApi.Models.GameSchemaAchievement;
+using AvailableGameStats = GameService.Infrastructure.SteamApi.Models.GameSchemaResponse.AvailableGameStats;
+using GameSchemaAchievement = GameService.Infrastructure.SteamApi.Models.GameSchemaResponse.GameSchemaAchievement;
+using GameService.Infrastructure.SteamApi.Models.GameSchemaResponse;
 
 namespace GameService.Tests.HandlersTests
 {

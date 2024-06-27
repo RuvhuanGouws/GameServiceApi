@@ -5,6 +5,7 @@ using GameService.Application.Mediator;
 using GameService.Application.Queries;
 using GameService.Domain.ValueObjects;
 using Microsoft.Azure.Cosmos.Linq;
+using GameService.Application.DTOs.GameSchema;
 namespace GameService.Api.Controllers
 {
     [ApiController]
@@ -19,7 +20,7 @@ namespace GameService.Api.Controllers
         }
 
         [HttpGet("user/{steamId}")]
-        public async Task<ActionResult<IEnumerable<GameDto>>> GetOwnedGames(string steamId)
+        public async Task<ActionResult<IEnumerable<GameDto>>> GetOwnedGamesAsync(string steamId)
         {
             try
             {
@@ -33,7 +34,7 @@ namespace GameService.Api.Controllers
         }
 
         [HttpGet("{appId}")]
-        public async Task<ActionResult<GameSchemaDto>> GetGameDetails(int appId)
+        public async Task<ActionResult<GameSchemaDto>> GetGameDetailsAsync(int appId)
         {
             try
             {

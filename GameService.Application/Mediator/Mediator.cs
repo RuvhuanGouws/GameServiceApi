@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace GameService.Application.Mediator
 {
+    /// <summary>
+    /// Represents a mediator to handle requests and dispatch them to their respective handlers.
+    /// </summary>
     public class Mediator : IMediator
     {
         private readonly IServiceProvider _serviceProvider;
@@ -17,6 +20,13 @@ namespace GameService.Application.Mediator
             _serviceProvider = serviceProvider;
         }
 
+        /// <summary>
+        /// Sends a request to the appropriate handler.
+        /// </summary>
+        /// <typeparam name="TResponse">The response type the handler will return.</typeparam>
+        /// <param name="request">The request to handle.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the handler response.</returns>
+        /// <exception cref="Exception">Thrown if no handler for the request is found.</exception>
         public async Task<TResponse> Send<TResponse>(IRequest<TResponse> request)
         {
             var handlerType = typeof(IRequestHandler<,>).MakeGenericType(request.GetType(), typeof(TResponse));

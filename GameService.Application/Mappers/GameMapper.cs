@@ -1,5 +1,5 @@
 ﻿using GameService.Application.DTOs;
-using GameService.Infrastructure.SteamApi.Models;
+using GameService.Infrastructure.SteamApi.Models.GamesResponse;
 
 namespace GameService.Application.Mappers
 {

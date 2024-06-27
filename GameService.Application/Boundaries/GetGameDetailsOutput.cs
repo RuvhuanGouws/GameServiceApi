@@ -1,4 +1,4 @@
-﻿using GameService.Application.DTOs;
+﻿using GameService.Application.DTOs.GameSchema;
 using System;
 using System.Collections.Generic;
 using System.Linq;

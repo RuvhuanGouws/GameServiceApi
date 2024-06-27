@@ -1,7 +1,7 @@
 ﻿using GameService.Application.Handlers;
 using GameService.Application.Queries;
 using GameService.Infrastructure.SteamApi;
-using GameService.Infrastructure.SteamApi.Models;
+using GameService.Infrastructure.SteamApi.Models.GamesResponse;
 
 
 namespace GameService.Tests.HandlersTests

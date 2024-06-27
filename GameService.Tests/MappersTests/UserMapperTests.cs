@@ -10,7 +10,7 @@ namespace GameService.Tests.MappersTests
         public void ToDto_ValidUser_ReturnsExpectedUserDto()
         {
             // Arrange
-            var user = new User(Guid.NewGuid(), "TestDisplayName", "test@example.com", "123456789123456789");
+            var user = new User("TestDisplayName", "test@example.com", "123456789123456789", Guid.NewGuid().ToString());
 
             // Act
             var result = UserMapper.ToDto(user);

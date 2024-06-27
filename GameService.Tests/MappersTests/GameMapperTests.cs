@@ -1,5 +1,6 @@
 ﻿using GameService.Infrastructure.SteamApi.Models;
 using GameService.Application.Mappers;
+using GameService.Infrastructure.SteamApi.Models.GamesResponse;
 
 namespace GameService.Tests.MappersTests
 {

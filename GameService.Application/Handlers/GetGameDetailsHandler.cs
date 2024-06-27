@@ -1,5 +1,5 @@
 ﻿using GameService.Application.Boundaries;
-using GameService.Application.DTOs;
+using GameService.Application.DTOs.GameSchema;
 using GameService.Application.Mappers;
 using GameService.Application.Queries;
 using GameService.Domain.ValueObjects;
@@ -31,14 +31,14 @@ namespace GameService.Application.Handlers
                 return null;
             }
 
-            List<GameSchemaAchievement> achievements = new List<GameSchemaAchievement>();
+            List<GameSchemaAchievementDto> achievements = new List<GameSchemaAchievementDto>();
 
             // Not all games have achievements
             if (game.AvailableGameStats != null && game.AvailableGameStats.Achievements != null)
             {
                 foreach (var achievement in game.AvailableGameStats.Achievements)
                 {
-                    achievements.Add(new GameSchemaAchievement
+                    achievements.Add(new GameSchemaAchievementDto
                     {
                         Defaultvalue = achievement.Defaultvalue,
                         Description = achievement.Description,
@@ -55,7 +55,7 @@ namespace GameService.Application.Handlers
             {
                 GameName = game.GameName,
                 GameVersion = game.GameVersion,
-                AvailableGameStats = new AvailableGameStats
+                AvailableGameStats = new AvailableGameStatsDto
                 {
                     Achievements = achievements
                 }

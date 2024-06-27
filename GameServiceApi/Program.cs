@@ -5,7 +5,6 @@ using GameService.Application.Mediator;
 using GameService.Application.Queries;
 using GameService.Infrastructure.Persistence;
 using GameService.Infrastructure.SteamApi;
-
 using Microsoft.Azure.Cosmos;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,7 +21,8 @@ builder.Services.AddScoped<ISteamApiClient, SteamApiClient>();
 builder.Services.AddScoped<IMediator, Mediator>();
 
 // Register Handlers
-builder.Services.AddScoped<IRequestHandler<GetUserQuery, GetUserOutput>, GetUserHandler>();
+builder.Services.AddScoped<IRequestHandler<GetUserBySteamIdQuery, GetUserOutput>, GetUserBySteamIdHandler>();
+builder.Services.AddScoped<IRequestHandler<GetUserByIdQuery, GetUserOutput>, GetUserByIdHandler>();
 builder.Services.AddScoped<IRequestHandler<GetUsersQuery, GetUsersOutput>, GetUsersListHandler>();
 builder.Services.AddScoped<IRequestHandler<CreateUserCommand, CreateUserOutput>, CreateUserHandler>();
 builder.Services.AddScoped<IRequestHandler<GetOwnedGamesQuery, GetOwnedGamesOutput>, GetOwnedGamesHandler>();
@@ -30,7 +30,7 @@ builder.Services.AddScoped<IRequestHandler<GetGameDetailsQuery, GetGameDetailsOu
 
 builder.Services.AddHttpClient<ISteamApiClient, SteamApiClient>(client =>
 {
-    client.BaseAddress = new Uri("https://api.steampowered.com/");
+    client.BaseAddress = new Uri(builder.Configuration["SteamBaseUri"]!);
 });
 
 // Cosmos Setup
@@ -47,14 +47,6 @@ builder.Services.AddSingleton<Container>(serviceProvider =>
 
     return client.GetContainer(databaseName, containerName);
 });
-//builder.Services.AddSingleton<Container>(serviceProvider =>
-//{
-//    var client = serviceProvider.GetRequiredService<CosmosClient>();
-//    var databaseName = "GameService";
-//    var containerName = "Groups";
-
-//    return client.GetContainer(databaseName, containerName);
-//});
 
 var app = builder.Build();
 

@@ -12,7 +12,8 @@ namespace GameService.Infrastructure.Persistence
     public interface IUserRepository
     {
         public Task<IEnumerable<User>> GetUsers();
-        public Task<HttpStatusCode> CreateAsync(User user);
+        public Task<User?> CreateAsync(string steamId, string email, string displayName);
         public Task<User?> GetBySteamIdAsync(SteamId steamId);
+        public Task<User?> GetByIdAsync(string id);
     }
 }

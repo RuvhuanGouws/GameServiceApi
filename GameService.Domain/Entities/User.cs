@@ -9,14 +9,14 @@ namespace GameService.Domain.Entities
 {
     public class User
     {
-        public string id { get; set; }
+        public string? id { get; set; }
         public string DisplayName { get; set; }
         public string Email { get; set; }
         public string SteamId { get; set; }
 
-        public User(Guid id, string displayName, string email, string steamId)
+        public User(string displayName, string email, string steamId, string userId = "")
         {
-            this.id = id.ToString();
+            id = userId;
             DisplayName = displayName;
             Email = email;
             SteamId = steamId;

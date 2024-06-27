@@ -8,12 +8,12 @@ namespace GameService.Tests.HandlersTests
     public class GetUserHandlerTests
     {
         private readonly Mock<IUserRepository> _mockUserRepository;
-        private readonly GetUserHandler _getUserHandler;
+        private readonly GetUserBySteamIdHandler _getUserHandler;
 
         public GetUserHandlerTests()
         {
             _mockUserRepository = new Mock<IUserRepository>();
-            _getUserHandler = new GetUserHandler(_mockUserRepository.Object);
+            _getUserHandler = new GetUserBySteamIdHandler(_mockUserRepository.Object);
         }
 
         [Fact]
@@ -21,12 +21,12 @@ namespace GameService.Tests.HandlersTests
         {
             // Arrange
             var steamId = "123456789123456789";
-            var user = new User(Guid.NewGuid(), "DisplayName", "email@example.com", steamId);
+            var user = new User("DisplayName", "email@example.com", steamId, Guid.NewGuid().ToString());
             _mockUserRepository.Setup(repo => repo.GetBySteamIdAsync(steamId))
                 .ReturnsAsync(user);
 
             // Act
-            var result = await _getUserHandler.Handle(new GetUserQuery(steamId));
+            var result = await _getUserHandler.Handle(new GetUserBySteamIdQuery(steamId));
 
             // Assert
             Assert.NotNull(result);
@@ -44,7 +44,7 @@ namespace GameService.Tests.HandlersTests
                 .ReturnsAsync((User)null);
 
             // Act
-            var result = await _getUserHandler.Handle(new GetUserQuery(steamId));
+            var result = await _getUserHandler.Handle(new GetUserBySteamIdQuery(steamId));
 
             // Assert
             Assert.Null(result);

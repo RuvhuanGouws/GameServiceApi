@@ -1,4 +1,5 @@
-﻿using GameService.Infrastructure.SteamApi.Models;
+﻿using GameService.Infrastructure.SteamApi.Models.GameSchemaResponse;
+using GameService.Infrastructure.SteamApi.Models.GamesResponse;
 using System;
 using System.Collections.Generic;
 using System.Linq;

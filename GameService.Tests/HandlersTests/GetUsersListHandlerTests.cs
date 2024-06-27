@@ -24,8 +24,8 @@ namespace GameService.Tests.HandlersTests
             // Arrange
             var users = new List<User>
             {
-                new User(Guid.NewGuid(), "User1", "user1@example.com", "123456789123456789"),
-                new User(Guid.NewGuid(), "User2", "user2@example.com", "123456789123456788")
+                new User("User1", "user1@example.com", "123456789123456789", Guid.NewGuid().ToString()),
+                new User("User2", "user2@example.com", "123456789123456788", Guid.NewGuid().ToString())
             };
             _mockUserRepository.Setup(repo => repo.GetUsers()).ReturnsAsync(users);
 
