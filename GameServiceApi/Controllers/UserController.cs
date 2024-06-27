@@ -29,7 +29,7 @@ namespace GameService.Api.Controllers
         public async Task<ActionResult<UserDto>> GetUserByIdAsync(string id)
         {
             var userDto = await _mediator.Send(new GetUserByIdQuery(id));
-            return userDto == null ? NotFound() : Ok(userDto);
+            return userDto.User == null ? NotFound() : Ok(userDto);
         }
 
         [HttpGet("Steam/{steamId}")]

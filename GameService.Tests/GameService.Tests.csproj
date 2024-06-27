@@ -27,6 +27,7 @@
     <ProjectReference Include="..\GameService.Application\GameService.Application.csproj" />
     <ProjectReference Include="..\GameService.Domain\GameService.Domain.csproj" />
     <ProjectReference Include="..\GameService.Infrastructure\GameService.Infrastructure.csproj" />
+    <ProjectReference Include="..\GameServiceApi\GameService.Api.csproj" />
   </ItemGroup>
 
 </Project>
