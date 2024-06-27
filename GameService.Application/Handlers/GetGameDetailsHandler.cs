@@ -24,6 +24,13 @@ namespace GameService.Application.Handlers
         public async Task<GetGameDetailsOutput?> Handle(GetGameDetailsQuery request)
         {
             var game = await _steamApiClient.GetAppDetails(request.AppId);
+
+
+            if (game == null)
+            {
+                return null;
+            }
+
             List<GameSchemaAchievement> achievements = new List<GameSchemaAchievement>();
 
             // Not all games have achievements

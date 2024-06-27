@@ -10,7 +10,7 @@ namespace GameService.Application.Mappers
             return new GameDto(
                 game.Appid,
                 game.Name,
-                $"http://media.steampowered.com/steamcommunity/public/images/apps/{game.Appid}/{game.ImgIconUrl}.jpg", // ImgIconUrl only contains a hash with file name
+                !string.IsNullOrEmpty(game.ImgIconUrl) ? $"http://media.steampowered.com/steamcommunity/public/images/apps/{game.Appid}/{game.ImgIconUrl}.jpg" : string.Empty, // ImgIconUrl only contains a hash with file name
                 game.PlaytimeForever,
                 game.HasCommunityVisibleStats);
         }

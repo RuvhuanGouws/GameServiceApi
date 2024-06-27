@@ -9,7 +9,7 @@ namespace GameService.Infrastructure.SteamApi
 {
     public interface ISteamApiClient
     {
-        Task<List<Game>> GetOwnedGames(string steamId);
-        Task<GameSchemaResponse> GetAppDetails(int appId);
+        Task<List<Game>?> GetOwnedGames(string steamId);
+        Task<GameSchemaResponse?> GetAppDetails(int appId);
     }
 }

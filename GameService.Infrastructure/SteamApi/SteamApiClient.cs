@@ -21,27 +21,27 @@ namespace GameService.Infrastructure.SteamApi
             _apiKey = Environment.GetEnvironmentVariable("STEAM_API_KEY")
               ?? throw new Exception("STEAM_API_KEY environment variable not found.");
         }
-        public async Task<GameSchemaResponse> GetAppDetails(int appId)
+        public async Task<GameSchemaResponse?> GetAppDetails(int appId)
         {
             var response = await _httpClient.GetFromJsonAsync<GameSchemaRoot>(
                 $"https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key={_apiKey}&appid={appId}");
 
             if (response is null || response.Game == null)
             {
-                throw new Exception("Failed to retrieve game schema details.");
+                return null;
             }
 
             return response.Game!;
         }
 
-        public async Task<List<Game>> GetOwnedGames(string steamId)
+        public async Task<List<Game>?> GetOwnedGames(string steamId)
         {
             var response = await _httpClient.GetFromJsonAsync<GamesResponseRoot>(
                 $"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={_apiKey}&steamid={steamId}&format=json&include_appinfo=true&include_played_free_games=true");
 
             if (response is null || !response.Response.Games.Any())
             {
-                throw new Exception("Failed to retrieve owned games for the given steam ID.");
+                return null;
             }
 
             return response.Response.Games;

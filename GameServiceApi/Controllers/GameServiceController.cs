@@ -21,15 +21,29 @@ namespace GameService.Api.Controllers
         [HttpGet("user/{steamId}")]
         public async Task<ActionResult<IEnumerable<GameDto>>> GetOwnedGames(string steamId)
         {
-            var games = await _mediator.Send(new GetOwnedGamesQuery(steamId));
-            return games.Games == null ? NotFound() : Ok(games.Games);
+            try
+            {
+                var games = await _mediator.Send(new GetOwnedGamesQuery(steamId));
+                return games.Games == null ? NotFound() : Ok(games.Games);
+            }
+            catch (ArgumentException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpGet("{appId}")]
         public async Task<ActionResult<GameSchemaDto>> GetGameDetails(int appId)
         {
-            var game = await _mediator.Send(new GetGameDetailsQuery(appId));
-            return game == null ? NotFound() : Ok(game.GameDetails);
+            try
+            {
+                var game = await _mediator.Send(new GetGameDetailsQuery(appId));
+                return game == null ? NotFound() : Ok(game.GameDetails);
+            }
+            catch (ArgumentException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

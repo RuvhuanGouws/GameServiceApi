@@ -23,6 +23,12 @@ namespace GameService.Application.Handlers
         public async Task<GetOwnedGamesOutput?> Handle(GetOwnedGamesQuery request)
         {
             var games = await _steamApiClient.GetOwnedGames(request.SteamId);
+
+            if (games == null)
+            {
+                return null;
+            }
+
             return new GetOwnedGamesOutput(games.Select(g => GameMapper.ToDto(g)));
         }
     }

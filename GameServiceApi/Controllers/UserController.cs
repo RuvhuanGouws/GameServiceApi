@@ -27,8 +27,15 @@ namespace GameService.Api.Controllers
         [HttpGet("{steamId}")]
         public async Task<ActionResult<UserDto>> GetUser(string steamId)
         {
-            var userDto = await _mediator.Send(new GetUserQuery(steamId));
-            return userDto == null ? NotFound() : Ok(userDto);
+            try
+            {
+                var userDto = await _mediator.Send(new GetUserQuery(steamId));
+                return userDto == null ? NotFound() : Ok(userDto);
+            }
+            catch (ArgumentException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpPost]
@@ -39,8 +46,12 @@ namespace GameService.Api.Controllers
                 var command = new CreateUserCommand(dto.SteamId, dto.DisplayName, dto.Email, Guid.NewGuid());
                 var output = await _mediator.Send(command);
 
-                return output.IsSuccess ? CreatedAtAction(nameof(GetUser), new { steamId = output.User.SteamId.Value }, output.User) : Conflict(output.ErrorMessage);
-            } 
+                return output.IsSuccess ? CreatedAtAction(nameof(GetUser), new { steamId = output.User!.SteamId }, output.User) : Conflict(output.ErrorMessage);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, "An error occurred while registering the user." + ex.Message);

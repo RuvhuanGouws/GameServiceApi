@@ -10,8 +10,8 @@ namespace GameService.Application.DTOs
 {
     public class UserDto
     {
-        String Id { get; set; }
-        public SteamId SteamId { get; set; }
+        public string Id { get; set; }
+        public string SteamId { get; set; }
         public string DisplayName { get; set; }
         public string Email { get; set; }
         
@@ -20,7 +20,8 @@ namespace GameService.Application.DTOs
         {
             SteamId = "123456789123456789";
             DisplayName = string.Empty;
-            Email = string.Empty;            
+            Email = string.Empty;
+            Id = string.Empty;
         }
 
         public UserDto(SteamId steamId, string displayName, string email, string id)
