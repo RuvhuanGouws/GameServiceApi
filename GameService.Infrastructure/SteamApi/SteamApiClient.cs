@@ -15,6 +15,7 @@ namespace GameService.Infrastructure.SteamApi
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiKey;
+        private const string SteamBaseUri = "https://api.steampowered.com";
 
         public SteamApiClient(HttpClient httpClient)
         {
@@ -25,7 +26,7 @@ namespace GameService.Infrastructure.SteamApi
         public async Task<GameSchemaResponse?> GetAppDetails(int appId)
         {
             var response = await _httpClient.GetFromJsonAsync<GameSchemaRoot>(
-                $"https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key={_apiKey}&appid={appId}");
+                $"{SteamBaseUri}/ISteamUserStats/GetSchemaForGame/v2/?key={_apiKey}&appid={appId}");
 
             if (response is null || response.Game == null)
             {
@@ -40,7 +41,7 @@ namespace GameService.Infrastructure.SteamApi
             try
             {
                 var response = await _httpClient.GetFromJsonAsync<GamesResponseRoot>(
-                $"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={_apiKey}&steamid={steamId}&format=json&include_appinfo=true&include_played_free_games=true");
+                $"{SteamBaseUri}/IPlayerService/GetOwnedGames/v0001/?key={_apiKey}&steamid={steamId}&format=json&include_appinfo=true&include_played_free_games=true");
 
                 if (response is null || !response.Response.Games.Any())
                 {

@@ -21,13 +21,14 @@ builder.Services.AddScoped<ISteamApiClient, SteamApiClient>();
 builder.Services.AddScoped<IMediator, Mediator>();
 
 // Register Handlers
-builder.Services.AddScoped<IRequestHandler<GetUserBySteamIdQuery, GetUserOutput>, GetUserBySteamIdHandler>();
-builder.Services.AddScoped<IRequestHandler<GetUserByIdQuery, GetUserOutput>, GetUserByIdHandler>();
-builder.Services.AddScoped<IRequestHandler<GetUsersQuery, GetUsersOutput>, GetUsersListHandler>();
-builder.Services.AddScoped<IRequestHandler<CreateUserCommand, CreateUserOutput>, CreateUserHandler>();
-builder.Services.AddScoped<IRequestHandler<GetOwnedGamesQuery, GetOwnedGamesOutput>, GetOwnedGamesHandler>();
-builder.Services.AddScoped<IRequestHandler<GetGameDetailsQuery, GetGameDetailsOutput>, GetGameDetailsHandler>();
+builder.Services.AddTransient<IRequestHandler<GetUserBySteamIdQuery, GetUserOutput>, GetUserBySteamIdHandler>();
+builder.Services.AddTransient<IRequestHandler<GetUserByIdQuery, GetUserOutput>, GetUserByIdHandler>();
+builder.Services.AddTransient<IRequestHandler<GetUsersQuery, GetUsersOutput>, GetUsersListHandler>();
+builder.Services.AddTransient<IRequestHandler<CreateUserCommand, CreateUserOutput>, CreateUserHandler>();
+builder.Services.AddTransient<IRequestHandler<GetOwnedGamesQuery, GetOwnedGamesOutput>, GetOwnedGamesHandler>();
+builder.Services.AddTransient<IRequestHandler<GetGameDetailsQuery, GetGameDetailsOutput>, GetGameDetailsHandler>();
 
+// Steam Client
 builder.Services.AddHttpClient<ISteamApiClient, SteamApiClient>(client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["SteamBaseUri"]!);
