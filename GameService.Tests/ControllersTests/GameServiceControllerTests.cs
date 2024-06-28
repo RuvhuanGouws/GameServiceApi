@@ -20,13 +20,12 @@ namespace GameService.Tests.ControllersTests
         }
 
         [Fact]
-        public async Task GetOwnedGamesAsync_ValidSteamId_ReturnsOkObjectResultWithGames()
+        public async Task GetOwnedGamesAsync_WithValidSteamId_ReturnsOkResult()
         {
             // Arrange
             var steamId = "123456789123456789";
-            var games = new List<GameDto> { new GameDto(123, "Test Game", "test.jpg", 123456, false) };
-            _mockMediator.Setup(m => m.Send(new GetOwnedGamesQuery(steamId)))
-                         .ReturnsAsync(new GetOwnedGamesOutput(games));
+            var games = new GetOwnedGamesOutput(new List<GameDto>{ new GameDto(123, "Test Game", "test.jpg", 123456, false) });
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetOwnedGamesQuery>())).ReturnsAsync(games);
 
             // Act
             var result = await _controller.GetOwnedGamesAsync(steamId);
@@ -39,29 +38,28 @@ namespace GameService.Tests.ControllersTests
         }
 
         [Fact]
-        public async Task GetOwnedGamesAsync_InvalidSteamId_ReturnsBadRequest()
+        public async Task GetOwnedGamesAsync_WithInvalidSteamId_ReturnsBadRequest()
         {
             // Arrange
-            var steamId = "invalid";
-            _mockMediator.Setup(m => m.Send(new GetOwnedGamesQuery(steamId)))
-                         .ThrowsAsync(new ArgumentException("Invalid Steam ID"));
+            var steamId = "invalidsteamid";
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetOwnedGamesQuery>()))
+                         .ThrowsAsync(new ArgumentException("Invalid Steam ID format."));
 
             // Act
             var result = await _controller.GetOwnedGamesAsync(steamId);
 
             // Assert
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
-            Assert.Equal("Invalid Steam ID", badRequestResult.Value);
+            Assert.Equal("Invalid Steam ID format.", badRequestResult.Value);
         }
 
         [Fact]
-        public async Task GetGameDetailsAsync_ValidAppId_ReturnsOkObjectResultWithGameDetails()
+        public async Task GetGameDetailsAsync_WithValidAppId_ReturnsOkResult()
         {
             // Arrange
             var appId = 123;
-            var gameDetails = new GameSchemaDto { GameName = "Test Game", AvailableGameStats = null, GameVersion = "1.1" };
-            _mockMediator.Setup(m => m.Send(new GetGameDetailsQuery(appId)))
-                         .ReturnsAsync(new GetGameDetailsOutput(gameDetails));
+            var gameDetails = new GameSchemaDto { GameName = "Test Game", GameVersion = "1.0" };
+            _mockMediator.Setup(m => m.Send(It.IsAny<GetGameDetailsQuery>())).ReturnsAsync(new GetGameDetailsOutput(gameDetails));
 
             // Act
             var result = await _controller.GetGameDetailsAsync(appId);
@@ -69,17 +67,8 @@ namespace GameService.Tests.ControllersTests
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
             var returnValue = Assert.IsType<GameSchemaDto>(okResult.Value);
+            Assert.Equal("Test Game", returnValue.GameName);
         }
-
-        //[Fact]
-        //public async Task GetGameDetailsAsync_InvalidAppId_ReturnsBadRequest()
-        //{
-        //    // Arrange
-        //    var appId = -1;         
-
-        //    // Act & Assert
-        //    Assert.Throws<ArgumentException>(() => new GetGameDetailsQuery(appId));
-        //}
     }
 }
 

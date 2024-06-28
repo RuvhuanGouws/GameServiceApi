@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using GameService.Domain.Entities;
 using GameService.Application.DTOs;
 using GameService.Application.Mediator;
 using GameService.Application.Queries;
-using GameService.Domain.ValueObjects;
-using Microsoft.Azure.Cosmos.Linq;
 using GameService.Application.DTOs.GameSchema;
 namespace GameService.Api.Controllers
 {
