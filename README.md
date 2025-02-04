@@ -34,7 +34,7 @@ The Game Service API is a RESTful API designed to provide information about Stea
 
 ### Installation
 
-1.  Clone the repository: `git clone https://github.com/YourUsername/SteamAchievementHunterAPI.git`
+1.  Clone the repository: `git clone [https://github.com/YourUsername/SteamAchievementHunterAPI.git](https://github.com/RuvhuanGouws/GameServiceApi)`
 2.  Set up your Cosmos DB connection string in `appsettings.json`:
     ```json
     {
