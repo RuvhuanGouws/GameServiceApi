@@ -1,15 +1,9 @@
 ﻿using GameService.Application.Boundaries;
 using GameService.Application.Commands;
 using GameService.Application.Mappers;
-using GameService.Domain.Entities;
 using GameService.Infrastructure.Persistence;
 using GameService.Infrastructure.SteamApi;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace GameService.Application.Handlers
 {
