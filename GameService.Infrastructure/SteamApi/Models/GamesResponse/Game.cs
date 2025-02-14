@@ -6,7 +6,7 @@ namespace GameService.Infrastructure.SteamApi.Models.GamesResponse
     {
         [JsonPropertyName("appid")]
         public int Appid { get; set; }
-        [JsonPropertyName("name ")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
         [JsonPropertyName("playtime_forever")]
         public int PlaytimeForever { get; set; }
